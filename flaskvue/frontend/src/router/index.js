@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+
 const routerOptions = [
   { path: '/', component: 'Landing_Page' },
   { path: '/home', component: 'Home_Page' },

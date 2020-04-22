@@ -1,82 +1,87 @@
 <template>
 <div class = "container-fluid">
-<nav class="navbar navbar-expand-lg  navbar-fixed-top navbar-light bg-success">
-  <a class="navbar-brand ml-2" href="#">
-  <div class = "container" style = "background-color:white" >
-    <span style = "color:#0E9F35;font-size:32px;font-weight:bold">M</span>
-    </div>
-  </a>
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <form class="form-inline my-2 my-lg-0 mr-auto">
-      <div class = "row lg-6 no-gutters ">
-        <div class = "col d-flex" >
-          <input class="form-control lg-6" style = "box-shadow:0px 1px 1px 1px #e5e5e5;border-bottom:0;border-right:thin solid #e5e5e5;border-top:thin solid #e5e5e5;float:left;border-bottom-right-radius: 0px;border-top-right-radius: 0px; align-self:center" type="text" aria-label="Search">
+  <Nav_bar id = "navbar">
+  </Nav_bar>
+  <section>
+    <div class = "container">
+      <div class = "row py-1">
+        <div class = "w-80 py-3">
+          <h3 class = "card-title mt-5" style = "text-align:left">What's on your mind?</h3>
+          <div class = "card mt-4 " style="width:70%">
+            <div class = "card-body">
+                <form>
+                  <textarea class = "form-control form-control-lg" placeholder="Start a post..." rows = 3></textarea>
+                   <div class = "row">
+                     <div class = "col d-flex d-flex-row-reverse " style = "vertical-align:center">
+                      <button class = "btn btn-outline-success mr-3" style = "margin-top:12px">Post</button>
+                      <svg style = "" class="bi bi-image mt-3" width="2em" height="2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M14.002 2h-12a1 1 0 00-1 1v10a1 1 0 001 1h12a1 1 0 001-1V3a1 1 0 00-1-1zm-12-1a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V3a2 2 0 00-2-2h-12z" clip-rule="evenodd"/>
+                        <path d="M10.648 7.646a.5.5 0 01.577-.093L15.002 9.5V14h-14v-2l2.646-2.354a.5.5 0 01.63-.062l2.66 1.773 3.71-3.71z"/>
+                        <path fill-rule="evenodd" d="M4.502 7a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" clip-rule="evenodd"/>
+                      </svg>
+                     </div>
+                   </div>
+                </form>
+            </div>
+          </div>
+          <div class = "card mt-4" style="width:70%">
+            <div class = "card-body">
+              <div class = "row">
+                <div class = "col" style ="width:20%">
+                  <img class = "img-fluid" style ="height:60px;width:auto;border:1px solid none; border-radius:100%" src = "../assets/tajcore me.jpg">
+                </div>
+                <div class = "d-flex flex-column" style ="width:86%">
+                  <h4 class = "Card Title" style = "font-weight:bold; text-align:left">Tahjyei Thompson</h4>
+                  <p style = "margin-left:5px;font-size:12px;color:gray;text-align:left">4hr ago</p>
+                </div>
+              </div>
+              <div class = "row ml-2">
+                <p class = "mr-2" style = "text-align:left">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                <img class = "img-fluid" src = '../assets/tajcore me.jpg'>
+              </div>
+              <hr>
+              <div class = "row mr-2">
+                <div class = "col" style ="width:20%">
+                  <img class = "img-fluid" style ="height:60px;width:auto;border:1px solid none; border-radius:100%" src = "../assets/tajcore me.jpg">
+                </div>
+                <div class = "d-flex flex-column" style ="width:86%">
+                  <div class = "d-flex flex-row justify-content-between">
+                  <h4 class = "Card Title" style = "font-weight:bold; text-align:left">Tahjyei Thompson</h4>
+                   <p style = "margin-left:5px;font-size:15px;color:gray;margin-right:25px">11:00</p>
+                  </div>
+                  <p style = "margin-left:5px;font-size:16px;text-align:left">Damn I look good</p>
+                </div>
+              </div>
+              <hr>
+                <div class = "row mr-2">
+                <div class = "col" style ="width:20%">
+                  <img class = "img-fluid" style ="height:60px;width:auto;border:1px solid none; border-radius:100%" src = "../assets/tajcore me.jpg">
+                </div>
+                <div class = "d-flex flex-column" style ="width:86%">
+                  <form>
+                    <textarea  class = "form-control mt-3" placeholder="Leave a comment" rows = 1></textarea>
+                  </form>
+                </div>
+                </div>
+            </div>
+          </div>
         </div>
-          <button style = "box-shadow:1px 1px 1px 1px #e5e5e5;border-top:thin solid #e5e5e5;float:left;height:38px;background-color:#EEEEEE;padding:0" class="btn" type="submit">
-            <img  style = "height:100%;width:80%;" src = "../assets/search-24px.png">
-          </button>
-        <div/>
+      </div>
     </div>
-    </form>
-    <ul style = "align-items:center" class="navbar-nav mr-5 d-inline-flex">
-      <li class="nav-item mr-5" >
-        <div class = "d-inline-flex p-2">
-          <img src = "../assets/tajcore me.jpg" style = "align-self:center;height:40px;width:40px;border: 1px solid none;border-radius:40px">
-          <button style = "font-weight:bold;color:white" class="btn btn-success btn-outline-white nav-link" href="#">Tahjyei</button>
-        </div>
-      </li>
-      <li class="nav-item mr-5">
-        <button style = "font-weight:bold;color:white" class="btn btn-success btn-outline-white nav-link" href="#">Home</button>
-      </li>
-     <b-dropdown id="dropdown-1" right variant ="success" no-caret  class="nav item mr-5 ">
-       <template v-slot:button-content>
-         <Strong>Create</Strong>
-       </template>
-    <b-dropdown-item>
-      <div style = "align-items:center" class = "row d-flex-inline">
-        <img class = "ml-2 mr-2" style = "height:16px; width:auto" src = "../assets/flag.png">
-        <strong class = "">Page</strong>
-      </div>
-      <div style = "align-items:center" class = "row d-flex-inline">
-        <strong style = "margin-left:28px; color:#A29B9B">Connect and share with customers or fans</strong>
-      </div>
-    </b-dropdown-item>
-    <b-dropdown-divider></b-dropdown-divider>
-    <b-dropdown-item>
-      <div style = "align-items:center" class = "row d-flex-inline">
-        <img class = "ml-2 mr-2" style = "height:16px; width:auto" src = "../assets/Component 4 – 1.png">
-        <strong class = "">Ad</strong>
-      </div>
-      <div style = "align-items:center" class = "row d-flex-inline">
-        <strong  style = "margin-left:33px;color:#A29B9B">Advertise your business or organization</strong>
-      </div>
-    </b-dropdown-item>
-    <b-dropdown-divider></b-dropdown-divider>
-       <b-dropdown-item>
-      <div style = "align-items:center" class = "row d-flex-inline">
-        <img class = "ml-2 mr-2" style = "height:16px; width:auto" src = "../assets/team.png">
-        <strong class = "">Group</strong>
-      </div>
-      <div style = "align-items:center" class = "row d-flex-inline">
-        <strong  style = "margin-left:37px;color:#A29B9B">Find people with shared interests</strong>
-      </div>
-    </b-dropdown-item>
-    <b-dropdown-divider></b-dropdown-divider>
-       <b-dropdown-item>
-      <div style = "align-items:center" class = "row d-flex-inline">
-        <img class = "ml-2 mr-2" style = "height:16px; width:auto" src = "../assets/event_note-24px.png">
-        <strong class = "">Event</strong>
-      </div>
-      <div style = "align-items:center" class = "row d-flex-inline">
-        <strong  style = "margin-left:33px;color:#A29B9B">Bring people together with events</strong>
-      </div>
-    </b-dropdown-item>
-  </b-dropdown>
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#"><img style = "height:40px;width:auto" src = "../assets/supervisor_account-24px.png"></a>
-      </li>
-    </ul>
-  </div>
-</nav>
+  </section>
+
 </div>
 </template>
+
+<script>
+
+// eslint-disable-next-line camelcase
+import Nav_bar from './Nav_bar.vue'
+
+export default{
+  components: {
+    'Nav_bar': Nav_bar
+  }
+}
+
+</script>
