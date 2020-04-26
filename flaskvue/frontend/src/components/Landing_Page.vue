@@ -1,6 +1,6 @@
 <template>
 <div class = "container-fluid">
-<nav class="navbar navbar-expand-lg p-4  navbar-fixed-top navbar-light bg-success">
+<nav class="navbar navbar-expand-lg   fixed-top navbar-light bg-success">
   <a class="navbar-brand ml-2" href="#">
   <span style = "color:white;font-size:32px;font-weight:bold">MyBook</span>
   </a>
@@ -8,12 +8,12 @@
     <form class="form-inline my-2 my-lg-0 ml-auto">
       <input class="form-control sm-1 mr-sm-2" type="text" placeholder="E-mail" aria-label="Search">
       <input class="form-control sm-1 mr-sm-2" type="text" placeholder="Password" aria-label="Search">
-      <button class="btn btn-success btn-outline-white my-2 my-sm-0" type="submit">Login</button>
+      <router-link to="/home"><button class="btn btn-success btn-outline-white my-2 my-sm-0" type="submit">Login</button></router-link>
     </form>
   </div>
 </nav>
 
-<div class = "container-fluid">
+<div class = "container-fluid" style = "margin-top:10%">
   <div class = "row mt-5">
     <div class = "col mb-5">
       <div class = "container-fluid">
@@ -81,6 +81,8 @@
       </div>
     </div>
   </div>
-
+  <nav class="navbar navbar-expand-lg p-4 fixed-bottom navbar-light bg-success">
+    <h4 class = "ml-auto nav-brand" style = "color:white">Copyright 2020 COMP3161</h4>
+  </nav>
 </div>
 </template>

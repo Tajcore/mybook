@@ -1,6 +1,6 @@
 <template>
-<div>
-<nav  class="navbar navbar-expand-lg  navbar-fixed-top navbar-light bg-success">
+
+<nav  class="navbar navbar-expand-lg navbar-default fixed-top navbar-light bg-success">
   <a class="navbar-brand ml-2" href="#">
   <div class = "container" style = "background-color:white" >
     <span style = "color:#0E9F35;font-size:32px;font-weight:bold">M</span>
@@ -18,17 +18,25 @@
         <div/>
     </div>
     </form>
-    <ul style = "align-items:center" class="navbar-nav mr-5 d-inline-flex">
+    <ul style = "align-items:center;margin-right:auto" class="navbar-nav d-inline-flex">
       <li class="nav-item mr-5" >
         <div class = "d-inline-flex p-2">
-          <img src = "../assets/tajcore me.jpg" style = "align-self:center;height:40px;width:40px;border: 1px solid none;border-radius:40px">
-          <button style = "font-weight:bold;color:white" class="btn btn-success btn-outline-white nav-link" href="#">Tahjyei</button>
+          <router-link to="/profile">
+            <button style = "height:50px;font-weight:bold;color:white" class="btn btn-success btn-outline-white nav-link" >
+              <div class = "mb-5 d-flex flex-row-reverse ">
+                <span style = "margin-top:3px;" class = "ml-2">Tahjyei</span>
+                <img src = "../assets/tajcore me.jpg" style = "height:40px;width:40px;border: 1px solid none;border-radius:40px">
+              </div>
+            </button>
+          </router-link>
         </div>
       </li>
       <li class="nav-item mr-5">
-        <button style = "font-weight:bold;color:white" class="btn btn-success btn-outline-white nav-link" href="#">Home</button>
+        <router-link to="/home">
+          <button style = "font-weight:bold;color:white" class="btn btn-success btn-outline-white nav-link" >Home</button>
+        </router-link>
       </li>
-     <b-dropdown id="dropdown-1" right variant ="success" no-caret  class="nav item mr-5 ">
+     <b-dropdown id="dropdown-1"  variant ="success" no-caret  class="nav item mr-5 ">
        <template v-slot:button-content>
          <Strong>Create</Strong>
        </template>
@@ -52,7 +60,7 @@
       </div>
     </b-dropdown-item>
     <b-dropdown-divider></b-dropdown-divider>
-       <b-dropdown-item>
+       <b-dropdown-item v-b-modal.modal-no-backdrop>
       <div style = "align-items:center" class = "row d-flex-inline">
         <img class = "ml-2 mr-2" style = "height:16px; width:auto" src = "../assets/team.png">
         <strong class = "">Group</strong>
@@ -64,7 +72,7 @@
     <b-dropdown-divider></b-dropdown-divider>
        <b-dropdown-item>
       <div style = "align-items:center" class = "row d-flex-inline">
-        <img class = "ml-2 mr-2" style = "height:16px; width:auto" src = "../assets/event_note-24px.png">
+        <img class = "ml-2 mr-2" style = "height:16px; width:auto" src = "../assets/event_note-24px-black.png">
         <strong class = "">Event</strong>
       </div>
       <div style = "align-items:center" class = "row d-flex-inline">
@@ -77,6 +85,37 @@
       </li>
     </ul>
   </div>
-</nav>
+  <div>
+  <b-modal cancel-disabled ok-disabled id="modal-no-backdrop" hide-backdrop content-class="shadow" title="Create New Group">
+    <div class = "container">
+      <div class = "row">
+        <div class = "container" style = "border:1px solid lightgray">
+        <div class = "row">
+          <div class = "w-30">
+            <img class = "img-fluid" src = "../assets/Component 3 – 1.png">
+          </div>
+          <div class = "col d-flex">
+            <p class = "mt-3"  style = "color:gray;font-size:12px">Groups are great for getting things done and staying in touch with just the people you want. Share photos and videos, have conversations, make plans and more.</p>
+          </div>
+        </div>
+        </div>
+      </div>
+      <div class = "row d-flex flex-column">
+        <h5 class = "mt-3">Name your group</h5>
+        <form>
+          <input type = "text" class = "form-control" placeholder="Group name here">
+        </form>
+      </div>
+    </div>
+  <template v-slot:modal-footer="{ create, cancel}">
+          <b-button size="sm" variant="success" @click="create()">
+            Create
+          </b-button>
+            <b-button size="sm" variant="danger" @click="cancel()">
+              Cancel
+            </b-button>
+        </template>
+  </b-modal>
 </div>
+</nav>
 </template>
