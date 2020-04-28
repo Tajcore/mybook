@@ -1,3 +1,4 @@
+/* eslint-disable vue/valid-v-model */
 <template>
 <div class = "container-fluid">
 <nav class="navbar navbar-expand-lg   fixed-top navbar-light bg-success">
@@ -5,10 +6,10 @@
   <span style = "color:white;font-size:32px;font-weight:bold">MyBook</span>
   </a>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <form class="form-inline my-2 my-lg-0 ml-auto">
-      <input class="form-control sm-1 mr-sm-2" type="text" placeholder="E-mail" aria-label="Search">
-      <input class="form-control sm-1 mr-sm-2" type="text" placeholder="Password" aria-label="Search">
-      <router-link to="/home"><button class="btn btn-success btn-outline-white my-2 my-sm-0" type="submit">Login</button></router-link>
+    <form v-on:submit.prevent="login" class="form-inline my-2 my-lg-0 ml-auto">
+      <input v-model = "login_email" name = "email" class="form-control sm-1 mr-sm-2" type="text" placeholder="E-mail" aria-label="Search">
+      <input v-model ="login_password" name ="login-password" class="form-control sm-1 mr-sm-2" type="password" placeholder="Password" aria-label="Search">
+      <button   class="btn btn-success btn-outline-white my-2 my-sm-0" type="submit">Login</button>
     </form>
   </div>
 </nav>
@@ -52,37 +53,104 @@
          <div class = "col">
             <p style = "font-size:32px;font-weight:bold;text-align:left">Sign Up</p>
             <p style = "font-size:26px;font-weight:normal;text-align:left">It's quick and easy</p>
-            <form>
+            <form v-on:submit.prevent = "register">
                 <div class = "row mb-3 ">
                   <div class = "col-sm-4">
-                    <input class="form-control sm-1" type="text" placeholder="First Name" aria-label="first name">
+                    <input name = "fname" v-model ="fname" class="form-control sm-1" type="text" placeholder="First Name" aria-label="first name">
                   </div>
                   <div class = "col-sm-4">
-                    <input class="form-control sm-1" type="text" placeholder="Last Name" aria-label="last name">
+                    <input name = "lname"  v-model= "lname" class="form-control sm-1" type="text" placeholder="Last Name" aria-label="last name">
                   </div>
                 </div>
                 <div class = "row mb-3">
                   <div class = "col-lg-8">
-                      <input class="form-control sm- mr-sm-2" type="email" placeholder="E-mail" aria-label="email">
+                      <input name = "email"  v-model="email" class="form-control sm- mr-sm-2" type="email" placeholder="E-mail" aria-label="email">
                   </div>
                 </div>
                 <div class = "row mb-3">
                   <div class = "col-lg-8">
-                      <input class="form-control sm- mr-sm-2" type="password" placeholder="Password" aria-label="password">
+                      <input  name = "password"  v-model = "password" class="form-control sm- mr-sm-2" type="password" placeholder="Password" aria-label="password">
                   </div>
                   </div>
                 <div class = "row no-gutters justify-content-start mb-3">
-                    <button style="background-color:#24416D;color:white;font-weight:bold;letter-spacing:2px;" class="btn btn-outline-white my-2 my-sm-0" type="submit">Sign Up</button>
+                    <button value = "register_button" name = "register_button" style="background-color:#24416D;color:white;font-weight:bold;letter-spacing:2px;" class="btn btn-outline-white my-2 my-sm-0" type="submit">Sign Up</button>
                 </div>
             </form>
+            <FlashMessage></FlashMessage>
            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <nav class="navbar navbar-expand-lg p-4 fixed-bottom navbar-light bg-success">
+  <nav style = "z-index:-1" class="navbar navbar-expand-lg p-4 fixed-bottom navbar-light bg-success">
     <h4 class = "ml-auto nav-brand" style = "color:white">Copyright 2020 COMP3161</h4>
   </nav>
 </div>
 </template>
+
+<script>
+import axios from 'axios'
+import router from '../router'
+import EventBus from './EventBus'
+
+export default {
+  data () {
+    return {
+      email: '',
+      password: '',
+      fname: '',
+      lname: '',
+      form: ''
+    }
+  },
+
+  methods: {
+    register () {
+      axios.post('http://localhost:5000/register', {
+        email: this.email,
+        password: this.password,
+        fname: this.fname,
+        form: 'register',
+        lname: this.lname
+      }).then((res) => {
+        this.flashMessage.success(res.data)
+      }).catch((err) => {
+        // eslint-disable-next-line eqeqeq
+        if (err.name != 'NavigationDuplicated') {
+          this.flashMessage.error({title: err.name, message: err.message})
+          throw err
+        }
+      })
+      var x
+      for (x of document.getElementsByClassName('form-control')) {
+        x.value = ''
+      }
+    },
+    login () {
+      axios.post('http://localhost:5000/login', {
+        email: this.login_email,
+        password: this.login_password,
+        form: 'login'
+      }).then((res) => {
+        localStorage.setItem('usertoken', res.data)
+        this.email = ''
+        this.password = ''
+        router.push({ name: 'Home' })
+        this.flashMessage.success({title: 'Log In Successful', message: "You've successfully Logged In!"})
+      }).catch((err) => {
+        // eslint-disable-next-line eqeqeq
+        if (err.name != 'NavigationDuplicated') {
+          this.flashMessage.error({title: 'Invalid Login', message: 'Either the username or password is invalid'})
+          console.log(err)
+          throw err
+        }
+      })
+      this.emitMethod()
+    },
+    emitMethod () {
+      EventBus.$emit('logged-in', 'loggedin')
+    }
+  }
+}
+</script>

@@ -24,7 +24,7 @@
           <router-link to="/profile">
             <button style = "height:50px;font-weight:bold;color:white" class="btn btn-success btn-outline-white nav-link" >
               <div class = "mb-5 d-flex flex-row-reverse ">
-                <span style = "margin-top:3px;" class = "ml-2">Tahjyei</span>
+                <span style = "margin-top:3px;" class = "ml-2">{{ first_name }}</span>
                 <img src = "../assets/tajcore me.jpg" style = "height:40px;width:40px;border: 1px solid none;border-radius:40px">
               </div>
             </button>
@@ -119,3 +119,29 @@
 </div>
 </nav>
 </template>
+
+<script>
+import EventBus from './EventBus'
+
+EventBus.$on('logged-in', test => {
+
+})
+export default {
+  data () {
+    return {
+      auth: '',
+      user: ''
+    }
+  },
+  methods: {
+    logout () {
+      localStorage.removeItem('usertoken')
+    }
+  },
+  mounted () {
+    EventBus.$on('logged-in', status => {
+      this.auth = status
+    })
+  }
+}
+</script>

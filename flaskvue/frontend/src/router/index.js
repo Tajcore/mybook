@@ -2,8 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 const routerOptions = [
-  { path: '/', component: 'Landing_Page' },
-  { path: '/home', component: 'Home_Page' },
+  { path: '/', name: 'Landing', component: 'Landing_Page' },
+  { path: '/home', name: 'Home', component: 'Home_Page' },
   { path: '*', component: 'NotFound' },
   // eslint-disable-next-line standard/object-curly-even-spacing
   { path: '/profile', component: 'Profile'}

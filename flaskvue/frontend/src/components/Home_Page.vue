@@ -77,10 +77,20 @@
 
 // eslint-disable-next-line camelcase
 import Nav_bar from './Nav_bar.vue'
+import jwtDecode from 'jwt-decode'
 
 export default{
   components: {
     'Nav_bar': Nav_bar
+  },
+  data () {
+    const token = localStorage.usertoken
+    const decoded = jwtDecode(token)
+    return {
+      first_name: decoded.identity.first_name,
+      last_name: decoded.identity.last_name,
+      id: decoded.identity.id
+    }
   }
 }
 

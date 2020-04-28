@@ -1,6 +1,6 @@
-# mybook_frontend
+# mybook
 
-> Intended to demonstrate various principles of Database Design from the course COMP3161
+> Facebook clone
 
 ## Build Setup
 
