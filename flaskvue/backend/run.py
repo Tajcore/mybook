@@ -7,12 +7,12 @@ from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 from flask_jwt_extended import create_access_token
 
-app = Flask(__name__,
-            static_folder = "../dist/static",
-            template_folder = "../dist")
+app = Flask(__name__, 
+            static_folder = "../frontend/static",
+            template_folder = "../frontend")
 UPLOAD_FOLDER = '../dist/uploads'
 
-app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_USER'] = 'db_user'
 app.config['MYSQL_PASSWORD'] = 'password'
 app.config['MYSQL_DB'] = 'mybook'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
@@ -39,7 +39,7 @@ def register():
             password = bcrypt.generate_password_hash(
             request.get_json()['password']).decode('utf-8')
             date = datetime.utcnow()
-            sql = "INSERT INTO User (f_name, l_name, e_mail, password, date_created) VALUES (%s, %s , %s , %s , %s)"
+            sql = "INSERT INTO User (f_name, l_name, email, password, date_created) VALUES (%s, %s , %s , %s , %s)"
             val = (first_name,last_name,email,password,date)
             cur.execute(sql,val)
             mysql.connection.commit()
@@ -51,6 +51,7 @@ def register():
                     'created': date
                 }
             return jsonify({'result': result}) 
+        
 @app.route('/login', methods= ["POST","GET"])
 def login():
         if request.method == 'POST' and request.get_json()['form'] == "login":
@@ -58,20 +59,28 @@ def login():
             email = request.get_json()['email']
             password = request.get_json()['password']
             result = ""
-            cur.execute("SELECT * FROM user where email = '" + str(email) + "'")
+            cur.execute("SELECT * FROM User where email = '" + str(email) + "'")
             rv = cur.fetchone()
 
             if bcrypt.check_password_hash(rv['password'], password):
                 access_token = create_access_token(
                     identity={
-                        'first_name': rv['first_name'],
-                        'last_name': rv['last_name'],
+                        'first_name': rv['f_name'],
+                        'last_name': rv['l_name'],
                         'email': rv['email'],
                         'id' : rv['id']
                     })
-                result = access_token
+                responseObj = {
+                    'status': 200,
+                    'message': 'Successfully login',
+                    'auth_token': access_token
+                }
             else:
-                result = jsonify({"error": "Invalid username and password"})
-            return result
+                responseObj = {
+                    'status': 400,
+                    'status': 'Invalid username and password'
+                }
+
+            return responseObj
         
 app.run(debug=True)

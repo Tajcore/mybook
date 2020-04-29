@@ -2,9 +2,9 @@ CREATE TABLE `User` (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`f_name` varchar(30) NOT NULL,
 	`l_name` varchar(30) NOT NULL,
-	`e_mail` varchar(320) NOT NULL UNIQUE,
+    `email` varchar(320) NOT NULL ,
 	`password` varchar(255) NOT NULL,
-	`date_created` DATETIME NOT NULL,
+    `date_created` DATE NOT NULL,
 	PRIMARY KEY (`id`)
 );
 
@@ -20,7 +20,7 @@ CREATE TABLE `Relationship` (
 CREATE TABLE `Post` (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`posted_by` int NOT NULL,
-	`date_posted` DATETIME NOT NULL,
+    `date_posted` DATE NOT NULL,
 	`post_image` varchar(255) NOT NULL,
 	`post_msg` TEXT NOT NULL,
 	PRIMARY KEY (`id`,`posted_by`)
@@ -31,14 +31,14 @@ CREATE TABLE `Comment` (
 	`comment_text` TEXT NOT NULL,
 	`posted_by` int NOT NULL,
 	`posted_to` int NOT NULL,
-	`date_commented` DATETIME NOT NULL,
+	`date_commented` DATE NOT NULL,
 	PRIMARY KEY (`id`,`posted_by`,`posted_to`)
 );
 
 CREATE TABLE `Group_` (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`created_by` int NOT NULL,
-	`name` varchar(255) NOT NULL UNIQUE,
+	`name` varchar(255) NOT NULL,
 	PRIMARY KEY (`id`,`created_by`)
 );
 

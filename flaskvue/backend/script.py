@@ -19,7 +19,7 @@ if connection.is_connected():
                 email = first_name + last_name + "@fakemail.com"
                 password = "password123"
                 password_ = generate_password_hash(password, method='pbkdf2:sha256')
-                sql = "INSERT INTO User (f_name, l_name, e_mail, password, date_created) VALUES (%s, %s , %s , %s , %s)"
+                sql = "INSERT INTO User (f_name, l_name, email, password, date_created) VALUES (%s, %s , %s , %s , %s)"
                 val = (first_name,last_name,email,password_,date)
                 cursor.execute(sql, val)
                 connection.commit()
