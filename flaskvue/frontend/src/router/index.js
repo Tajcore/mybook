@@ -6,7 +6,11 @@ const routerOptions = [
   { path: '/home', name: 'Home', component: 'Home_Page' },
   { path: '*', component: 'NotFound' },
   // eslint-disable-next-line standard/object-curly-even-spacing
-  { path: '/profile', component: 'Profile'}
+  { path: '/profile/:id', name: 'Profile', component: 'Profile'},
+  // eslint-disable-next-line standard/object-curly-even-spacing
+  { path: '/groups', name: 'Groups', component: 'Groups_page'},
+  // eslint-disable-next-line standard/object-curly-even-spacing
+  { path: '/group/:id', name: 'Group', component: 'Group_page'}
 ]
 const routes = routerOptions.map(route => {
   return {

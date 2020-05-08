@@ -10,25 +10,21 @@
     <form class="form-inline my-2 my-lg-0 mr-auto">
       <div class = "row lg-6 no-gutters ">
         <div class = "col d-flex" >
-          <input class="form-control lg-6" style = "box-shadow:0px 1px 1px 1px #e5e5e5;border-bottom:0;border-right:thin solid #e5e5e5;border-top:thin solid #e5e5e5;float:left;border-bottom-right-radius: 0px;border-top-right-radius: 0px; align-self:center" type="text" aria-label="Search">
+          <ejs-autocomplete id='employees'  v-model:='value' popupHeight:='height' :popupWidth='width'  :dataSource='users' :fields='fields' :placeholder='waterMark' :sortOrder='sortOrder' :itemTemplate='iTemplate' popupHeight="450px"></ejs-autocomplete>
         </div>
-          <button style = "box-shadow:1px 1px 1px 1px #e5e5e5;border-top:thin solid #e5e5e5;float:left;height:38px;background-color:#EEEEEE;padding:0" class="btn" type="submit">
-            <img  style = "height:100%;width:80%;" src = "../assets/search-24px.png">
-          </button>
-        <div/>
-    </div>
+        <div style = "width:50px;height:50px">
+            <img @click="toProfile_Search" style = "height:100%;width:auto%;" src = "../assets/search-24px.png">
+        </div>
     </form>
     <ul style = "align-items:center;margin-right:auto" class="navbar-nav d-inline-flex">
       <li class="nav-item mr-5" >
         <div class = "d-inline-flex p-2">
-          <router-link to="/profile">
-            <button style = "height:50px;font-weight:bold;color:white" class="btn btn-success btn-outline-white nav-link" >
+            <button @click="toProfile(id)" style = "height:50px;font-weight:bold;color:white" class="btn btn-success btn-outline-white nav-link" >
               <div class = "mb-5 d-flex flex-row-reverse ">
                 <span style = "margin-top:3px;" class = "ml-2">{{ first_name }}</span>
-                <img src = "../assets/tajcore me.jpg" style = "height:40px;width:40px;border: 1px solid none;border-radius:40px">
+                <img v-bind:src=profile_pic style = "height:40px;width:40px;border: 1px solid none;border-radius:40px">
               </div>
             </button>
-          </router-link>
         </div>
       </li>
       <li class="nav-item mr-5">
@@ -80,8 +76,10 @@
       </div>
     </b-dropdown-item>
   </b-dropdown>
-      <li class="nav-item">
-        <a class="nav-link disabled" href="#"><img style = "height:40px;width:auto" src = "../assets/supervisor_account-24px.png"></a>
+     <li class="nav-item mr-5">
+        <router-link to="/groups">
+          <button style = "font-weight:bold;color:white" class="btn btn-success btn-outline-white nav-link" >Groups</button>
+        </router-link>
       </li>
     </ul>
   </div>
@@ -103,11 +101,11 @@
       <div class = "row d-flex flex-column">
         <h5 class = "mt-3">Name your group</h5>
         <form>
-          <input type = "text" class = "form-control" placeholder="Group name here">
+          <input v-model="group_name" type = "text" class = "form-control" placeholder="Group name here">
         </form>
       </div>
     </div>
-  <template v-slot:modal-footer="{ create, cancel}">
+  <template v-slot:modal-footer="{cancel}">
           <b-button size="sm" variant="success" @click="create()">
             Create
           </b-button>
@@ -122,26 +120,101 @@
 
 <script>
 import EventBus from './EventBus'
+import jwtDecode from 'jwt-decode'
+import axios from 'axios'
+import Vue from 'vue'
+import { AutoCompletePlugin } from '@syncfusion/ej2-vue-dropdowns'
+
+Vue.use(AutoCompletePlugin)
 
 EventBus.$on('logged-in', test => {
 
 })
-export default {
+
+var itemVue = Vue.component('itemTemplate', {
+  template: `<div class = "d-flex flex-row"> 
+    <img style = "height:30px; width:auto" class = "img ml-2 mb-1 mt-2 mr-1" :src='data.profile_pic'>
+    <div>
+      <span style = "Font-weight:bold;color:gray" class = "mr-5" >{{data.name}}</span>
+    </div>
+    <hr>
+  </div>
+  `,
   data () {
     return {
-      auth: '',
-      user: ''
+      data: {}
     }
+  }
+})
+export default {
+  data () {
+    const token = localStorage.usertoken
+    const decoded = jwtDecode(token)
+    return {
+      width: '270px',
+      height: '300px',
+      profile_pic: decoded.identity.profile_pic,
+      first_name: decoded.identity.first_name,
+      last_name: decoded.identity.last_name,
+      id: decoded.identity.id,
+      auth: '',
+      user: '',
+      users: [],
+      value: null,
+      waterMark: 'Find user',
+      sortOrder: 'Ascending',
+      fields: {value: 'name'},
+      iTemplate: function (e) {
+        return {
+          template: itemVue
+        }
+      }}
   },
   methods: {
+    create () {
+      var fd = new FormData()
+      fd.append('group_name', this.group_name)
+      fd.append('user_id', this.id)
+      axios.post('http://localhost:5000/users/groups', fd).then((res) => {
+        this.flashMessage.success({title: 'New Group Created', message: 'Check out your group page!'})
+      }).catch((err) => {
+        // eslint-disable-next-line eqeqeq
+        if (err.name != 'NavigationDuplicated') {
+          this.flashMessage.error({title: err.name, message: err.message})
+          throw err
+        }
+      })
+    },
     logout () {
       localStorage.removeItem('usertoken')
+    },
+    toProfile (id) {
+      this.$router.push({name: 'Profile', params: {user_id: id}})
+    },
+    toProfile_Search () {
+      var keyword = document.getElementById('employees_hidden').value
+      var id = this.getID(keyword)
+      this.toProfile(id)
+    },
+    getID (string) {
+      var arr = string.split(' ')
+      return arr[2]
     }
   },
   mounted () {
+    console.log(document.getElementById('employees_hidden').value)
     EventBus.$on('logged-in', status => {
       this.auth = status
     })
+    axios.get('http://localhost:5000/users').then((res) => {
+      this.users = res.data.users
+    })
   }
 }
+
 </script>
+<style>
+@import "../../node_modules/@syncfusion/ej2-base/styles/material.css";
+@import "../../node_modules/@syncfusion/ej2-inputs/styles/material.css";
+@import "../../node_modules/@syncfusion/ej2-vue-dropdowns/styles/material.css";
+</style>

@@ -114,7 +114,7 @@ export default {
         form: 'register',
         lname: this.lname
       }).then((res) => {
-        this.flashMessage.success(res.data)
+        this.flashMessage.success({title: 'Registration Successful', message: 'New user created, please try logging in'})
       }).catch((err) => {
         // eslint-disable-next-line eqeqeq
         if (err.name != 'NavigationDuplicated') {

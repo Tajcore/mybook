@@ -12,7 +12,7 @@ connection = mysql.connector.connect(host='localhost',
                                          auth_plugin='mysql_native_password')
 if connection.is_connected():
         cursor = connection.cursor()
-        for _ in range(10):
+        for _ in range(30):
                 name = random_names.name().split(" ")
                 first_name = name[0]
                 last_name = name[1]
@@ -22,6 +22,12 @@ if connection.is_connected():
                 sql = "INSERT INTO User (f_name, l_name, e_mail, password, date_created) VALUES (%s, %s , %s , %s , %s)"
                 val = (first_name,last_name,email,password_,date)
                 cursor.execute(sql, val)
+                connection.commit()
+                cursor.execute("SELECT * FROM User where e_mail = '" + str(email) + "'")
+                rv = cursor.fetchone()
+                sql = "INSERT INTO Profile (user_id,profile_pic,dob,biography,gender,location) VALUES (%s, %s , %s , %s , %s,%s)"
+                val = (str(rv[0]),"user.png","1000-01-01","none","none","none")
+                cursor.execute(sql,val)
                 connection.commit()
                 print("1 record inserted, ID:", cursor.lastrowid)
 

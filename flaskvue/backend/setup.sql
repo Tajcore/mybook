@@ -61,6 +61,7 @@ CREATE TABLE `Profile` (
 	`dob` DATE,
 	`biography` TEXT,
 	`gender` varchar(20),
+	`location` varchar(60),
 	PRIMARY KEY (`user_id`)
 );	
 
@@ -102,7 +103,8 @@ CREATE PROCEDURE UpdateProfile(
 	IN bio text, 
 	IN genders varchar(20),
 	IN prof_pic varchar(255),
-	IN dob_ date
+	IN dob_ date,
+	IN loc VARCHAR(60)
 )
 BEGIN
 	UPDATE PROFILE
@@ -110,7 +112,8 @@ BEGIN
 	 biography = bio,
 	 gender = genders,
 	 profile_pic = prof_pic,
-	 dob = dob_
+	 dob = dob_,
+	 location = loc
 	WHERE user_id = id;
 END //
 
@@ -147,9 +150,9 @@ CREATE PROCEDURE GetFriends(
 )
 
 BEGIN 
-	SELECT user2_id
+	SELECT user1_id, user2_id
 	FROM Relationship
-	WHERE user1_id = id1;	
+	WHERE (user1_id = id1 OR user2_id = id1) AND relationship.status = 1;
 END //
 
 /* Finding Specific User */
@@ -199,11 +202,12 @@ CREATE PROCEDURE PostComments(
 BEGIN 
 	SELECT * FROM Comment
 	JOIN ( 
-		SELECT Post.id 
+		SELECT Post.id as poster_id
 		FROM Post
 		WHERE id = post_
 	) as post_comments_rship
-	WHERE Comment.posted_to = post_comments_rship.id;
+	WHERE Comment.posted_to = post_comments_rship.poster_id
+	ORDER BY date_commented DESC;
 END // 
 
 /* Join a Group_ */
@@ -248,4 +252,20 @@ BEGIN
 		WHERE group_id = grpid) as group_post
 	WHERE group_post.post_id = Post.id;
 END //
+
+
+/* Get Friend Request for User */
+
+CREATE PROCEDURE GetFriendRequest(
+	IN id1 int
+)
+
+BEGIN 
+	SELECT user1_id
+	FROM Relationship
+	WHERE (user2_id = id1) AND relationship.status = 0;
+END //
+
+
+
 DELIMITER ;

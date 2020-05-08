@@ -7,7 +7,9 @@ import BootstrapVue from 'bootstrap-vue/dist/bootstrap-vue.esm'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import FlashMessage from '@smartweb/vue-flash-message'
+import { AutoCompletePlugin } from '@syncfusion/ej2-vue-dropdowns'
 
+Vue.use(AutoCompletePlugin)
 Vue.use(BootstrapVue)
 Vue.config.productionTip = false
 Vue.use(FlashMessage)

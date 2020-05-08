@@ -1,14 +1,22 @@
-/* eslint-disable vue/require-v-for-key */
 <template>
-<div class = "container-fluid">
-  <Nav_bar id = "navbar">
-  </Nav_bar>
-  <section>
-    <div class = "container">
-      <div class = "row py-1">
-        <div class = "w-80 py-3">
-          <h3 class = "card-title mt-5" style = "text-align:left">What's on your mind?</h3>
-          <div class = "card mt-4 " style="width:70%">
+<div class = "container">
+    <nav_bar></nav_bar>
+    <div class = "container" style="margin-top:7%">
+        <div class = "row" style = "border:5px solid 28a745;height:200px;background-color:black">
+            <div class = " align-self-end col d-flex flex-row align-items-center justify-content-center">
+                <h1 style="color:white;margin-bottom:85px">{{group.group_name}}</h1>
+                <button  v-show="member_status === 1" style = "align-self:flex-end;height:40px;width:140px;" class = "align-self-end btn btn-success">
+                   <span style ="color:white">Member</span>
+                </button>
+                <button  @click="joinGroup" v-show="member_status === null" style = "align-self:flex-end;height:40px;width:140px;" class = "align-self-end btn btn-danger">
+                   <span style ="color:white">Join Group</span>
+                </button>
+            </div>
+        </div>
+        <div class = "col d-flex flex-column">
+        <div class = "row">
+        <div class = "col">
+          <div v-show="group.created_by === user_id" class = "card mt-4 " style="width:70%">
             <div class = "card-body">
                 <form v-on:submit.prevent="postSubmit" enctype="multipart/form-data">
                   <textarea v-model = "posting_msg" name = "posting_msg" class = "form-control form-control-lg" placeholder="Start a post..." rows = 3></textarea>
@@ -37,19 +45,19 @@
                 </form>
             </div>
           </div>
-          <div class = "card mt-4" v-for="post in posts" style="width:600px" :key="post.id">
+          <div class = "card mt-4" v-for="post in group.group_posts" style="width:600px" :key="post.post_id">
             <div class = "card-body">
               <div class = "row">
                 <div class = "col" style ="width:20%">
                   <img class = "img-fluid" v-bind:src=post.prof_pic  style ="height:50px;width:50px;border:1px solid none; border-radius:50%">
                 </div>
                 <div class = "d-flex flex-column" style ="width:86%">
-                  <h4 class = "Card Title" style = "font-size:16; font-weight:bold; text-align:left">{{post.first_name}} {{post.last_name}}</h4>
+                  <h4 class = "Card Title" style = "font-size:16; font-weight:bold; text-align:left">{{group.group_name}}</h4>
                   <p style = "margin-left:5px;font-size:12px;color:gray;text-align:left">{{post.date_posted}}</p>
                 </div>
               </div>
               <div class = "row ml-2">
-                <p class = "mr-2 mt-3" style = "text-align:left">{{post.msg}}</p>
+                <p class = "mr-2 mt-3" style = "text-align:left">{{post.post_msg}}</p>
                 <img v-if='post.img_url!=="/static/uploads/"' class = "img-fluid" :src='post.img_url'>
               </div>
               <hr>
@@ -71,9 +79,9 @@
                   <img class = "img-fluid" style ="border:1px solid none;height:70px;70px:auto;border:1px solid none; border-radius:50%" >
                 </div>
                 <div class = "d-flex flex-column" style ="width:86%">
-                  <form v-on:submit.prevent="commentSubmit(post.id)">
+                  <form v-on:submit.prevent="commentSubmit(post.post_id)">
                     <div class = "d-flex flex-row">
-                      <textarea :id = post.id style = "width:370px" class = "form-control mt-3" placeholder="Leave a comment" rows = 1></textarea>
+                      <textarea :id = post.post_id style = "width:370px" class = "form-control mt-3" placeholder="Leave a comment" rows = 1></textarea>
                       <div class = "ml-3 mt-3" style="height:38px;width:70px">
                       <button  type = "submit" class = "btn btn-outline-success btn-block" >Send</button>
                       </div>
@@ -83,19 +91,19 @@
                 </div>
             </div>
           </div>
+          </div>
         </div>
-        <div class="col">
-          <div class = "row">
-            <div class = "col">
+      </div>
+        <div class = "col">
           <b-container class = "mt-5">
-            <h3>Friend Request</h3>
+            <h3>Group Members</h3>
             <b-row>
-              <b-col style="margin-left:150px" cols="12" v-show="friend_request.length !== 0" sm="4" class="mb-4 absolutemy-1" :key="user.id" v-for="user in paginatedItems">
+              <b-col style="margin-left:150px" cols="12" v-show="group.members.length !== 0" sm="4" class="mb-4 absolutemy-1" :key="user.member_id" v-for="user in paginatedItems">
                     <div class = " card-body  d-flex flex-row justify-content-center align-items-center ">
-                      <img @click="toProfile(user.user_id)" style = "border:1px solid none; border-radius:50%; width:auto; height:70px" :src="user.profile_pic">
-                      <p class="ml-4 card-text">{{user.first_name}}  {{ user.last_name }}</p>
+                      <img @click="toProfile(user.member_id)" style = "border:1px solid none; border-radius:50%; width:auto; height:70px" :src="user.prof_pic">
+                      <p class="ml-4 card-text">{{user.member_fname}}  {{ user.member_lname }}</p>
                       <div class = "ml-4" style = "height:70%;width:auto">
-                      <b-button @click="acceptFriend(user.user_id)"  variant="outline-success">Accept</b-button>
+                      <b-button @click="toProfile(user.member_id)"  variant="outline-success">View Profile</b-button>
                       </div>
                     </div>
               </b-col>
@@ -114,52 +122,16 @@
             </b-row>
           </b-container>
             </div>
-          </div>
-          <div class = "row">
-            <div class = "col">
-          <b-container class = "mt-5">
-            <h3>Friends</h3>
-            <b-row>
-              <b-col style="margin-left:150px" cols="12" v-show="friend_request.length !== 0" sm="4" class="mb-4 absolutemy-1" :key="user.id" v-for="user in paginatedItems_friends">
-                    <div class = " card-body  d-flex flex-row justify-content-center align-items-center ">
-                      <img @click="toProfile(user.user_id)" style = "border:1px solid none; border-radius:50%;width:auto; height:70px" :src="user.profile_pic">
-                      <p class="ml-4 card-text">{{user.first_name}}  {{ user.last_name }}</p>
-                      <div class = "ml-4" style = "height:70%;width:auto">
-                      </div>
-                    </div>
-              </b-col>
-            </b-row>
-            <b-row>
-              <b-col style="margin-left:150px" md="6" class=" my-1">
-                <b-pagination
-                  @change="onPageChanged_friends"
-                  :total-rows="totalRows_friends"
-                  :per-page="perPage_friend"
-                  v-model="currentPage_friends"
-                  class="my-0"
-                />
-              </b-col>
-            </b-row>
-          </b-container>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </section>
-
-</div>
 </template>
 
 <script>
-
 // eslint-disable-next-line camelcase
 import Nav_bar from './Nav_bar.vue'
-import jwtDecode from 'jwt-decode'
+// eslint-disable-next-line no-unused-vars
 import axios from 'axios'
+import jwtDecode from 'jwt-decode'
 
-export default{
+export default {
   components: {
     'Nav_bar': Nav_bar
   },
@@ -167,87 +139,53 @@ export default{
     const token = localStorage.usertoken
     const decoded = jwtDecode(token)
     return {
-      paginatedItems_friends: [],
-      friends: [],
-      friend_request: [],
       profile_pic: decoded.identity.profile_pic,
       first_name: decoded.identity.first_name,
       last_name: decoded.identity.last_name,
-      id: decoded.identity.id,
-      posts: [],
+      user_id: decoded.identity.id,
+      group: [],
+      group_id: '',
       post_msg: this.posting_msg,
       image: '',
       selected_file: null,
       paginatedItems: [],
       currentPage: 1,
-      perPage: 5,
+      perPage: 3,
       totalRows: null,
-      currentPage_friends: 1,
-      perPage_friend: 3,
-      totalRows_friends: null }
-  },
-  mounted () {
-    axios.get('http://localhost:5000/user/posts/' + this.id.toString()).then((res) => {
-      this.posts = res.data.posts
-    })
-    axios.get('http://localhost:5000/users/friends/' + this.id.toString()).then((res) => {
-      this.friends = res.data.friends
-      this.paginatedItems_friends = this.friends
-      this.totalRows_friends = this.friends.length
-      this.paginate_friends(this.perPage_friend, 0)
-    })
-    axios.get('http://localhost:5000/users/request/' + this.id.toString()).then((res) => {
-      this.friend_request = res.data.requests
-      this.paginatedItems = this.friend_request
-      this.totalRows = this.friend_request.length
-      this.paginate(this.perPage, 0)
-    })
-  },
-  watch: {
-    posts: function (oldPosts, newPosts) {
-      this.getPosts()
-    },
-    friends: function (oldFriends, newFriends) {
-      this.getFriends()
-    },
-    friend_request: function (oldFriendRequests, newFriendRequest) {
-      this.getFriendRequest()
+      member_status: null
     }
   },
+
+  created () {
+    this.group_id = this.$route.params.group_id
+    axios.get('http://localhost:5000/users/group/' + this.group_id).then((res) => {
+      this.group = res.data.group
+      var member
+      for (member of this.group.members) {
+        if (member.member_id === this.user_id) {
+          this.member_status = 1
+        }
+        this.paginatedItems = this.group.members
+        this.totalRows = this.group.members.length
+        this.paginate(this.perPage, 0)
+      }
+    })
+  },
+  mounted () {
+
+  },
+  watch: {
+    group: function (oldPosts, newPosts) {
+      this.updateGroup()
+    },
+    member_status: function () {
+      this.checkStatus()
+    }},
   methods: {
-    getFriends () {
-      axios.get('http://localhost:5000/users/friends/' + this.id.toString()).then((res) => {
-        this.friends = res.data.friends
-        this.paginatedItems_friends = this.friends
-        this.totalRows_friends = this.friends.length
-      })
-    },
-    getFriendRequest () {
-      axios.get('http://localhost:5000/users/request/' + this.id.toString()).then((res) => {
-        this.friend_request = res.data.requests
-        this.paginatedItems = this.friend_request
-        this.totalRows = this.friend_request.length
-      })
-    },
     // eslint-disable-next-line camelcase
     paginate (page_size, page_number) {
-      let itemsToParse = this.friend_request
+      let itemsToParse = this.group.members
       this.paginatedItems = itemsToParse.slice(
-        // eslint-disable-next-line camelcase
-        page_number * page_size,
-        // eslint-disable-next-line camelcase
-        (page_number + 1) * page_size
-      )
-    },
-    getPosts () {
-      axios.get('http://localhost:5000/user/posts/' + this.id.toString()).then((res) => {
-        this.posts = res.data.posts
-      })
-    },
-    // eslint-disable-next-line camelcase
-    paginate_friends (page_size, page_number) {
-      let itemsToParse = this.friends
-      this.paginatedItems_friends = itemsToParse.slice(
         // eslint-disable-next-line camelcase
         page_number * page_size,
         // eslint-disable-next-line camelcase
@@ -257,8 +195,10 @@ export default{
     onPageChanged (page) {
       this.paginate(this.perPage, page - 1)
     },
-    onPageChanged_friends (page) {
-      this.paginate_friends(this.perPage_friend, page - 1)
+    updateGroup () {
+      axios.get('http://localhost:5000/users/group/' + this.group_id).then((res) => {
+        this.group = res.data.group
+      })
     },
     onFileChange (e) {
       var files = e.target.files || e.dataTransfer.files
@@ -277,41 +217,44 @@ export default{
       }
       reader.readAsDataURL(file)
     },
+    checkStatus () {
+      var member
+      for (member of this.group.members) {
+        if (member.member_id === this.user_id) {
+          this.member_status = 1
+        }
+      }
+    },
+    joinGroup () {
+      var fd = new FormData()
+      fd.append('user_id', this.user_id)
+      axios.post('http://localhost:5000/users/group/' + this.group_id, fd)
+    },
     toProfile (id) {
       this.$router.push({name: 'Profile', params: {user_id: id}})
     },
     postSubmit () {
       const fd = new FormData()
-      fd.append('user', this.id)
+      fd.append('group_id', this.group.group_id)
+      fd.append('user', this.user_id)
       fd.append('msg', this.posting_msg)
       fd.append('file', document.getElementById('file-input').files[0])
-      axios.post('http://localhost:5000/user/post', fd).then((res) => {
+      axios.post('http://localhost:5000/user/group/post', fd).then((res) => {
         this.posting_msg = ''
         this.image = ''
-        console.log(res)
         this.$forceUpdate()
       })
     },
     commentSubmit (postID) {
       const fd = new FormData()
       var commentmsg = document.getElementById(postID).value
-      fd.append('user', this.id)
+      fd.append('user', this.user_id)
       fd.append('posted_to', postID)
       fd.append('comment_txt', commentmsg)
       axios.post('http://localhost:5000/user/comment', fd).then((res) => {
         document.getElementById(postID).value = ''
         this.$forceUpdate()
       })
-    },
-    // eslint-disable-next-line camelcase
-    acceptFriend (user_id) {
-      var fd = new FormData()
-      fd.append('user1_id', user_id)
-      fd.append('user2_id', this.id)
-      axios.post('http://localhost:5000/users/accept', fd).then((res) => {
-        console.log(res)
-      }
-      )
     },
     dateToTime (str) {
       var date = new Date(str)
@@ -322,6 +265,7 @@ export default{
       return [date.getHours(), minutes].join(':')
     }
   }
+
 }
 
 </script>
