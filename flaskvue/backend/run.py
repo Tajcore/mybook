@@ -13,7 +13,7 @@ import uuid
 app = Flask(__name__,
             static_folder = "../dist/static",
             template_folder = "../dist")
-UPLOAD_FOLDER = '../frontend/static/uploads'    
+UPLOAD_FOLDER = '../dist/static/uploads'    
 
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'password'
@@ -352,7 +352,7 @@ def groups():
     if request.method == "POST":
         creator = request.form["user_id"]
         group_name = request.form["group_name"]
-        sql = "INSERT INTO GRO  UP_(created_by,name) VALUES(%s,%s)"
+        sql = "INSERT INTO GROUP_(created_by,name) VALUES(%s,%s)"
         val = (str(creator),group_name)
         cur = mysql.connection.cursor()      
         cur.execute(sql,val)
