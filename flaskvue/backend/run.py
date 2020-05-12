@@ -31,7 +31,9 @@ CORS(app)
 @app.route('/', methods= ["GET"])
 def web_page():
     return render_template("index.html")
-
+@app.route('/admin', methods= ["GET"])
+def admin_page():
+    return render_template("admin.html")
 @app.route('/register', methods= ["POST"])
 def register(): 
         if request.method == 'POST' and request.get_json()['form'] == "register":
@@ -224,7 +226,6 @@ def update_filepath(image):
     else:
         image = '/static/uploads/' + image
     return image
-
 @app.route('/users', methods = ["GET"])
 def users():
         if request.method == "GET":
@@ -442,4 +443,30 @@ def group_post():
                     'date': date
                 }
             return jsonify({'result': result}) 
+
+
+
+@app.route('/getUsers', methods=['GET','POST'])
+def getUsers():
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM USER")
+        res = cur.fetchall()
+        result = [{"id":rs["id"],"f_name":rs["f_name"],"l_name":rs["l_name"],"e_mail":rs["e_mail"],"date_created":rs["date_created"]} for rs in res]
+        return jsonify({"users":result})
+
+@app.route('/getDataCount', methods=['GET','POST'])
+def getDataCount():
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM USER")
+        users = cur.fetchall()
+        cur.execute("SELECT * FROM GROUP_")
+        groups = cur.fetchall()
+        cur.execute("SELECT * FROM POST")
+        posts = cur.fetchall()
+        cur.execute("SELECT * FROM COMMENT")
+        comments = cur.fetchall()
+        return jsonify({"users_count":len(users),
+        "groups_count":len(groups),
+        "posts_count":len(posts),
+        "comments_count":len(comments)})
 app.run(debug=True)

@@ -84,6 +84,7 @@
     </ul>
   </div>
   <div>
+    <FlashMessage></FlashMessage>
   <b-modal cancel-disabled ok-disabled id="modal-no-backdrop" hide-backdrop content-class="shadow" title="Create New Group">
     <div class = "container">
       <div class = "row">

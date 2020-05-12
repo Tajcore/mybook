@@ -93,6 +93,7 @@
                     <p style ="text-align:left; margin-left:20px; margin-top:10px">{{profile_details.bio}}</p>
             </div>
         </div>
+        <FlashMessage></FlashMessage>
     <b-modal  busy=true id="modal-edit-profile" hide-backdrop content-class="shadow" title="Edit Profile">
     <div class = "container" style = "height:650px;">
       <div class = "row">
@@ -218,7 +219,15 @@ export default{
       fd.append('bio', this.bio_input)
       fd.append('gender', this.gender_input)
       fd.append('user_id', this.id)
-      axios.post('http://localhost:5000/user/profile/' + this.id.toString(), fd)
+      axios.post('http://localhost:5000/user/profile/' + this.id.toString(), fd).then((res) => {
+        this.flashMessage.success({title: 'Profile Updated', message: 'Refresh the page to see the changes'})
+      }).catch((err) => {
+        // eslint-disable-next-line eqeqeq
+        if (err.name != 'NavigationDuplicated') {
+          this.flashMessage.error({title: err.name, message: err.message})
+          throw err
+        }
+      })
     },
     addFriend () {
       var fd = new FormData()
