@@ -13,6 +13,7 @@ Vue.use(AutoCompletePlugin)
 Vue.use(BootstrapVue)
 Vue.config.productionTip = false
 Vue.use(FlashMessage)
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

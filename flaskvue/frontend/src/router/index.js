@@ -10,7 +10,9 @@ const routerOptions = [
   // eslint-disable-next-line standard/object-curly-even-spacing
   { path: '/groups', name: 'Groups', component: 'Groups_page'},
   // eslint-disable-next-line standard/object-curly-even-spacing
-  { path: '/group/:id', name: 'Group', component: 'Group_page'}
+  { path: '/group/:id', name: 'Group', component: 'Group_page'},
+  // eslint-disable-next-line standard/object-curly-even-spacing
+  { path: '/search/:srch', name: 'SearchPage', component: 'UserSearch'}
 ]
 const routes = routerOptions.map(route => {
   return {

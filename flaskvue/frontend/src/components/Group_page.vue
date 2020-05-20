@@ -157,7 +157,7 @@ export default {
   },
 
   created () {
-    this.group_id = this.$route.params.group_id
+    this.group_id = parseInt(this.$route.params.id)
     axios.get('http://localhost:5000/users/group/' + this.group_id).then((res) => {
       this.group = res.data.group
       var member
@@ -231,7 +231,7 @@ export default {
       axios.post('http://localhost:5000/users/group/' + this.group_id, fd)
     },
     toProfile (id) {
-      this.$router.push({name: 'Profile', params: {user_id: id}})
+      this.$router.push('/profile/' + id)
     },
     postSubmit () {
       const fd = new FormData()

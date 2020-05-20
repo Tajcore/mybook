@@ -7,21 +7,21 @@
     </div>
   </a>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <form class="form-inline my-2 my-lg-0 mr-auto">
-      <div class = "row lg-6 no-gutters ">
+    <form v-on:submit.prevent="toProfile_Search" class="form-inline my-2 my-lg-0 mr-auto">
+      <div style="margin-top:15px;" class = "row lg-6 no-gutters ">
         <div class = "col d-flex" >
-          <ejs-autocomplete id='employees'  v-model:='value' popupHeight:='height' :popupWidth='width'  :dataSource='users' :fields='fields' :placeholder='waterMark' :sortOrder='sortOrder' :itemTemplate='iTemplate' popupHeight="450px"></ejs-autocomplete>
+          <input v-model="search" class = "form-control"></div>
+        <div style = "width:90px;height:50px">
+            <button  class="btn btn-block btn-success btn-outline-white my-2 my-sm-0" type="submit">Search</button>
         </div>
-        <div style = "width:50px;height:50px">
-            <img @click="toProfile_Search" style = "height:100%;width:auto%;" src = "../assets/search-24px.png">
         </div>
     </form>
     <ul style = "align-items:center;margin-right:auto" class="navbar-nav d-inline-flex">
       <li class="nav-item mr-5" >
         <div class = "d-inline-flex p-2">
-            <button @click="toProfile(id)" style = "height:50px;font-weight:bold;color:white" class="btn btn-success btn-outline-white nav-link" >
-              <div class = "mb-5 d-flex flex-row-reverse ">
-                <span style = "margin-top:3px;" class = "ml-2">{{ first_name }}</span>
+            <button @click="toProfile(id)" style = "height:50px;font-weight:bold;color:white" class="d-flex flex-row align-items-center btn btn-success btn-outline-white nav-link" >
+              <div style="width:101.953px;height:40" class = "mb-5 d-flex flex-row-reverse ">
+                <span style = "margin-top:4px;" class = "ml-2">{{ first_name }}</span>
                 <img v-bind:src=profile_pic style = "height:40px;width:40px;border: 1px solid none;border-radius:40px">
               </div>
             </button>
@@ -160,7 +160,6 @@ export default {
       id: decoded.identity.id,
       auth: '',
       user: '',
-      users: [],
       value: null,
       waterMark: 'Find user',
       sortOrder: 'Ascending',
@@ -190,12 +189,11 @@ export default {
       localStorage.removeItem('usertoken')
     },
     toProfile (id) {
-      this.$router.push({name: 'Profile', params: {user_id: id}})
+      this.$router.push('/profile/' + id)
     },
     toProfile_Search () {
-      var keyword = document.getElementById('employees_hidden').value
-      var id = this.getID(keyword)
-      this.toProfile(id)
+      var keyword = this.search
+      this.$router.push('/search/' + keyword)
     },
     getID (string) {
       var arr = string.split(' ')

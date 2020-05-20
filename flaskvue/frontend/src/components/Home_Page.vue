@@ -278,7 +278,7 @@ export default{
       reader.readAsDataURL(file)
     },
     toProfile (id) {
-      this.$router.push({name: 'Profile', params: {user_id: id}})
+      this.$router.push('/profile/' + id)
     },
     postSubmit () {
       const fd = new FormData()

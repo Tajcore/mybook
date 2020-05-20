@@ -79,11 +79,11 @@
                 </div>
                     <div class = "d-flex flex-row">
                     <img class = "mr-2 align-self-center" style ="margin-bottom:2px;height:25px ; width:auto" src="../assets/event_note-24px.png">
-                    <p class = "mt-3 ml-2 align-self-center" style = "color:gray"><strong>Joined on {{[profile_details.date_created]}}</strong></p>
+                    <p class = "mt-3 ml-2 align-self-center" style = "color:gray"><strong>Joined on {{dateConverter(profile_details.date_created)}}</strong></p>
                 </div>
                 <div class = "d-flex flex-row">
                     <img class = "mr-2 align-self-center" style ="margin-bottom:2px;height:25px ; width:auto" src="../assets/event_note-24px.png">
-                    <p class = "mt-3 ml-2 align-self-center" style = "color:gray"><strong>Born on {{profile_details.dob}}</strong></p>
+                    <p class = "mt-3 ml-2 align-self-center" style = "color:gray"><strong>Born on {{dateConverter(profile_details.dob)}}</strong></p>
                 </div>
                 <hr style = "width:100%;border:2px solid lightgray">
                 <div class = "d-flex flex-row">
@@ -176,7 +176,8 @@ export default{
     }
   },
   created () {
-    this.profile_id = this.$route.params.user_id
+    console.log(this.$route.params.id)
+    this.profile_id = parseInt(this.$route.params.id)
     var fd1 = new FormData()
     fd1.append('user1_id', this.id)
     fd1.append('user2_id', this.profile_id)
@@ -234,6 +235,34 @@ export default{
       fd.append('user1_id', this.id)
       fd.append('user2_id', this.profile_id)
       axios.post('/users/add', fd)
+    },
+    dateConverter (str) {
+      var weekday = new Array(7)
+      weekday[0] = 'Sunday'
+      weekday[1] = 'Monday'
+      weekday[2] = 'Tuesday'
+      weekday[3] = 'Wednesday'
+      weekday[4] = 'Thursday'
+      weekday[5] = 'Friday'
+      weekday[6] = 'Saturday'
+      var month = new Array(12)
+      month[0] = 'January'
+      month[1] = 'February'
+      month[2] = 'March'
+      month[3] = 'April'
+      month[4] = 'May'
+      month[5] = 'June'
+      month[6] = 'July'
+      month[7] = 'August'
+      month[8] = 'September'
+      month[9] = 'October'
+      month[10] = 'November'
+      month[11] = 'December'
+      var date = new Date(str)
+      var day = weekday[date.getDay()]
+      var mon = month[date.getMonth()]
+      var date_ = day + ' ' + mon + ' ' + date.getDate() + ', ' + date.getFullYear()
+      return date_
     }
   }
 }

@@ -43,7 +43,7 @@ export default {
 
   methods: {
     toGroup (id) {
-      this.$router.push({name: 'Group', params: {group_id: id}})
+      this.$router.push('/group/' + id)
     }
   }
 }

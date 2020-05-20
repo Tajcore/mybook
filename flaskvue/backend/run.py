@@ -469,4 +469,22 @@ def getDataCount():
         "groups_count":len(groups),
         "posts_count":len(posts),
         "comments_count":len(comments)})
+
+@app.route('/searchUser', methods=['GET','POST'])
+def searchspecificuser():
+    user = request.form["user"]
+    user_ = "%"+user+"%"
+    print(user_)
+    cur = mysql.connection.cursor()
+    cur.execute("CALL SEARCHUSER('"+user_+"')")
+    rs = cur.fetchall()
+    users = [{"f_name":user["f_name"],"l_name":user["l_name"],"id":user["id"]} for user in rs]
+    for user in users:
+        cur.execute("SELECT * FROM PROFILE WHERE user_id ='"+str(user["id"])+"'")
+        rs = cur.fetchone()
+        user.update({"dob":rs["dob"]})
+        user.update({"profile_pic":update_filepath(rs["profile_pic"])})
+        user.update({"location":rs["location"]})    
+    return jsonify({"users":users})
+
 app.run(debug=True)
