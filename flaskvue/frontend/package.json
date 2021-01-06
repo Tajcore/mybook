@@ -13,7 +13,7 @@
   "dependencies": {
     "@smartweb/vue-flash-message": "^0.6.4",
     "@syncfusion/ej2-vue-dropdowns": "^18.1.46",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bootstrap": "^4.4.1",
     "bootstrap-vue": "^2.12.0",
     "jwt-decode": "^2.2.0",
